@@ -1,0 +1,16 @@
+zone_id,zone_name,local_authority,easting,northing
+Z01,Newcastle city centre,Newcastle upon Tyne,424528,564726
+Z02,Newcastle east,Newcastle upon Tyne,427399,565673
+Z03,Newcastle west,Newcastle upon Tyne,420149,565748
+Z04,Newcastle north,Newcastle upon Tyne,422786,568505
+Z05,Gateshead centre and Felling,Gateshead,426389,561867
+Z06,Gateshead south and Birtley,Gateshead,426239,559048
+Z07,Blaydon and Whickham,Gateshead,416783,561679
+Z08,Wallsend and Longbenton,North Tyneside,429600,568111
+Z09,Killingworth and Shiremoor,North Tyneside,428917,571698
+Z10,North Shields and Whitley Bay,North Tyneside,434923,570336
+Z11,"Jarrow, Hebburn and Boldon",South Tyneside,433134,563484
+Z12,South Shields,South Tyneside,437442,564661
+Z13,Washington,Sunderland,430356,556356
+Z14,Sunderland centre and north,Sunderland,438237,558041
+Z15,"Sunderland south, Houghton and Hetton",Sunderland,436471,552785
