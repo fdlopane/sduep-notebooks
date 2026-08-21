@@ -25,10 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -74,9 +74,6 @@ jobs:
               sys.exit("::error::pyodideUrl still points off-site: " + url)
           PY
 
-      - name: Check notebook integrity
-        run: python tools/check_notebooks.py _output
-
       - name: Report the built size
         run: |
           du -sh _output
@@ -90,6 +87,9 @@ jobs:
           if [ "$SIZE_MB" -gt 700 ]; then
             echo "::warning::Built site is ${SIZE_MB} MB, approaching the 1 GB GitHub Pages limit."
           fi
+
+      - name: Check notebook integrity
+        run: python tools/check_notebooks.py _output
 
       - name: Upload the site as a Pages artifact
         uses: actions/upload-pages-artifact@v3
