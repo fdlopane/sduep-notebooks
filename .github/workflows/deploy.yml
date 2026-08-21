@@ -1,0 +1,108 @@
+name: Build and deploy JupyterLite
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  # The Pyodide distribution bundled into the site. This must match the version
+  # that jupyterlite-pyodide-kernel was released against - see README.md.
+  PYODIDE_VERSION: "314.0.1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install the build environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          jupyter lite --version
+
+      - name: Download the Pyodide distribution
+        run: |
+          URL="https://github.com/pyodide/pyodide/releases/download/${PYODIDE_VERSION}/pyodide-${PYODIDE_VERSION}.tar.bz2"
+          echo "Fetching $URL"
+          curl --fail --location --retry 3 --output pyodide.tar.bz2 "$URL"
+          ls -lh pyodide.tar.bz2
+
+      - name: Build the site
+        run: |
+          jupyter lite build \
+            --contents content \
+            --pyodide pyodide.tar.bz2 \
+            --output-dir _output
+
+      - name: Confirm Pyodide is bundled, not fetched from a CDN
+        run: |
+          if [ ! -f _output/static/pyodide/pyodide.js ]; then
+            echo "::error::Pyodide was not bundled into the build."
+            exit 1
+          fi
+          echo "Bundled Pyodide files:"
+          ls _output/static/pyodide | head -20
+          echo "..."
+          ls _output/static/pyodide | wc -l
+          python - <<'PY'
+          import json, pathlib, sys
+          config = json.loads(pathlib.Path("_output/jupyter-lite.json").read_text(encoding="utf-8"))
+          data = config.get("jupyter-config-data", {})
+          settings = data.get("litePluginSettings", {})
+          kernel = settings.get("@jupyterlite/pyodide-kernel-extension:kernel", {})
+          url = kernel.get("pyodideUrl", "")
+          print("pyodideUrl in the built config:", url or "(not set)")
+          if url.startswith("http"):
+              sys.exit("::error::pyodideUrl still points off-site: " + url)
+          PY
+
+      - name: Check notebook integrity
+        run: python tools/check_notebooks.py _output
+
+      - name: Report the built size
+        run: |
+          du -sh _output
+          du -sh _output/static/pyodide || true
+          SIZE_MB=$(du -sm _output | cut -f1)
+          echo "Built site: ${SIZE_MB} MB"
+          if [ "$SIZE_MB" -gt 950 ]; then
+            echo "::error::Built site is ${SIZE_MB} MB. GitHub Pages will not publish sites over 1 GB. See README.md, 'If the site is too large'."
+            exit 1
+          fi
+          if [ "$SIZE_MB" -gt 700 ]; then
+            echo "::warning::Built site is ${SIZE_MB} MB, approaching the 1 GB GitHub Pages limit."
+          fi
+
+      - name: Upload the site as a Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
