@@ -1,0 +1,8 @@
+# Wheels that the Pyodide distribution does not include, fetched at build time
+# and served from this site so that no kernel start reaches out to PyPI.
+#
+# Pin every line. An unpinned entry would silently change what learners run.
+# If the browser network check ever shows another package coming from
+# files.pythonhosted.org, add it here with its version and rebuild.
+
+comm==0.2.3
