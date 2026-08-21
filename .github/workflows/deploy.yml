@@ -45,11 +45,31 @@ jobs:
           curl --fail --location --retry 3 --output pyodide.tar.bz2 "$URL"
           ls -lh pyodide.tar.bz2
 
+      - name: Fetch wheels the Pyodide distribution does not include
+        run: |
+          # The kernel's ipykernel shim needs comm, which is not in the Pyodide
+          # package set. Without this the kernel reaches out to PyPI at startup
+          # and dies behind a proxy that blocks it. Add a line here if the
+          # browser network check ever shows another package coming from PyPI.
+          mkdir -p wheels
+          python -m pip download \
+            --dest wheels \
+            --no-deps \
+            --only-binary=:all: \
+            -r wheels.txt
+          ls -l wheels
+
       - name: Build the site
         run: |
+          PIPLITE_ARGS=()
+          for wheel in wheels/*.whl; do
+            PIPLITE_ARGS+=(--piplite-wheels "$wheel")
+          done
+          echo "Indexing locally: ${PIPLITE_ARGS[*]}"
           jupyter lite build \
             --contents content \
             --pyodide pyodide.tar.bz2 \
+            "${PIPLITE_ARGS[@]}" \
             --output-dir _output
 
       - name: Confirm Pyodide is bundled, not fetched from a CDN
@@ -72,6 +92,20 @@ jobs:
           print("pyodideUrl in the built config:", url or "(not set)")
           if url.startswith("http"):
               sys.exit("::error::pyodideUrl still points off-site: " + url)
+          PY
+
+      - name: List the locally indexed wheels
+        run: |
+          echo "Wheels served from this site rather than PyPI:"
+          ls _output/static/pypi/*.whl 2>/dev/null || echo "(none found - check the build log)"
+          python - <<'PY'
+          import json, pathlib
+          index = pathlib.Path("_output/static/pypi/all.json")
+          if index.is_file():
+              data = json.loads(index.read_text(encoding="utf-8"))
+              print("Packages in the local index:", ", ".join(sorted(data)))
+          else:
+              print("::warning::no local piplite index was written")
           PY
 
       - name: Report the built size
