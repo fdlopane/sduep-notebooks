@@ -27,6 +27,7 @@ EXPECTED = {
     "environment-check.ipynb",
     "fifteen-zone-model.ipynb",
     "fifteen-zone-model-FAULTY.ipynb",
+    "msoa-model-first-run.ipynb",
 }
 
 # JupyterLite's own configuration stubs, not notebooks.
