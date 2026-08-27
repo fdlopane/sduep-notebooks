@@ -29,6 +29,7 @@ EXPECTED = {
     "fifteen-zone-model-FAULTY.ipynb",
     "msoa-model-first-run.ipynb",
     "changing-beta.ipynb",
+    "reading-a-trip-matrix.ipynb",
 }
 
 # JupyterLite's own configuration stubs, not notebooks.
