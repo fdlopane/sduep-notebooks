@@ -30,6 +30,7 @@ EXPECTED = {
     "msoa-model-first-run.ipynb",
     "changing-beta.ipynb",
     "reading-a-trip-matrix.ipynb",
+    "computing-accessibility.ipynb",
 }
 
 # JupyterLite's own configuration stubs, not notebooks.
