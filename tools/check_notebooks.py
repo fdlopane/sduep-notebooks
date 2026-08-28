@@ -31,6 +31,7 @@ EXPECTED = {
     "changing-beta.ipynb",
     "reading-a-trip-matrix.ipynb",
     "computing-accessibility.ipynb",
+    "scheme-test.ipynb",
 }
 
 # JupyterLite's own configuration stubs, not notebooks.
