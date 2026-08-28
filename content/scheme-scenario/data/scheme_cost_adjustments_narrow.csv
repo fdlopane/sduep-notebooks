@@ -1,0 +1,94 @@
+﻿# Scheme cost adjustments: Tyne and Wear Metro extension to Washington
+#
+# origin_id, destination_id, gc_change_minutes
+# Negative values are improvements. Units are minutes of generalised cost,
+# the same units as gc_min in cost_matrix_msoa.csv.
+#
+# WHAT THE SCHEME IS
+# A 13 km extension of the Tyne and Wear Metro linking the existing stations at
+# Pelaw and South Hylton via Washington, with three new stations proposed at
+# Follingsby, Washington North and Washington South. As described by Nexus in
+# August 2026. Nexus has published no journey times for the proposal and no
+# public transport skim exists for this study area.
+#
+# WHERE THE 12 MINUTES COMES FROM
+# It does not come from Nexus and it is not a forecast. It is a course
+# assumption, set by the module author at a size large enough to move the map
+# and small enough to leave every Washington zone below the base accessibility
+# of the three regional centres. Both scheme files apply the same 12 minutes to
+# every pair they list, so that anything that differs between the two runs
+# differs because of which pairs are listed and for no other reason.
+#
+# Read the implied arithmetic before trusting it. Generalised cost from the
+# Washington zones to City Centre & Arthur's Hill runs from 20.13 to 27.56
+# minutes in cost_matrix_msoa.csv. Taking 12 minutes off implies a door-to-door
+# figure that no rail service covering 13 km with intermediate stops would
+# achieve. The number is an instrument, not an estimate.
+#
+# ONE COST MATRIX, TWO MODES
+# cost_matrix_msoa.csv holds a single highway free-flow generalised cost. A
+# public transport scheme has been written into it as though the highway cost
+# fell, because the course dataset carries no public transport skim to write it
+# into. A study would carry both and a mode choice between them.
+#
+# WHICH PAIRS ARE LISTED
+# A pair is listed only where its generalised cost in cost_matrix_msoa.csv is
+# 15.00 minutes or more. Taking twelve minutes off a journey that already costs
+# eleven would leave a figure no rail service could deliver, so short pairs are
+# left alone. The rule removes nothing from the narrow file, whose cheapest pair
+# costs 16.32 minutes.
+#
+# SYMMETRY
+# Every pair appears twice, once in each direction, with the same value. A
+# railway carries people both ways. Deleting the return rows is a one-line
+# change and it removes the three regional centres from the gains entirely.
+#
+# THIS FILE: NARROW
+# The seven Washington MSOAs against the three MSOAs holding the regional
+# centres: City Centre & Arthur's Hill, Gateshead Town, and Sunderland Central
+# & Deptford. The scheme read as a link to the places it is promoted as
+# reaching.
+#
+origin_id,destination_id,gc_change_minutes
+E02001731,E02001797,-12.0
+E02001731,E02001799,-12.0
+E02001731,E02001800,-12.0
+E02001731,E02001807,-12.0
+E02001731,E02001809,-12.0
+E02001731,E02001810,-12.0
+E02001731,E02001815,-12.0
+E02001797,E02001731,-12.0
+E02001797,E02001803,-12.0
+E02001797,E02006841,-12.0
+E02001799,E02001731,-12.0
+E02001799,E02001803,-12.0
+E02001799,E02006841,-12.0
+E02001800,E02001731,-12.0
+E02001800,E02001803,-12.0
+E02001800,E02006841,-12.0
+E02001803,E02001797,-12.0
+E02001803,E02001799,-12.0
+E02001803,E02001800,-12.0
+E02001803,E02001807,-12.0
+E02001803,E02001809,-12.0
+E02001803,E02001810,-12.0
+E02001803,E02001815,-12.0
+E02001807,E02001731,-12.0
+E02001807,E02001803,-12.0
+E02001807,E02006841,-12.0
+E02001809,E02001731,-12.0
+E02001809,E02001803,-12.0
+E02001809,E02006841,-12.0
+E02001810,E02001731,-12.0
+E02001810,E02001803,-12.0
+E02001810,E02006841,-12.0
+E02001815,E02001731,-12.0
+E02001815,E02001803,-12.0
+E02001815,E02006841,-12.0
+E02006841,E02001797,-12.0
+E02006841,E02001799,-12.0
+E02006841,E02001800,-12.0
+E02006841,E02001807,-12.0
+E02006841,E02001809,-12.0
+E02006841,E02001810,-12.0
+E02006841,E02001815,-12.0
