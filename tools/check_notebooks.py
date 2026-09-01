@@ -32,6 +32,7 @@ EXPECTED = {
     "reading-a-trip-matrix.ipynb",
     "computing-accessibility.ipynb",
     "scheme-test.ipynb",
+    "running-the-loop.ipynb",
 }
 
 # JupyterLite's own configuration stubs, not notebooks.
