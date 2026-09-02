@@ -33,6 +33,7 @@ EXPECTED = {
     "computing-accessibility.ipynb",
     "scheme-test.ipynb",
     "running-the-loop.ipynb",
+    "fixed-vs-variable.ipynb",
 }
 
 # JupyterLite's own configuration stubs, not notebooks.
