@@ -34,6 +34,7 @@ EXPECTED = {
     "scheme-test.ipynb",
     "running-the-loop.ipynb",
     "fixed-vs-variable.ipynb",
+    "AE1-growth-scenarios.ipynb",
 }
 
 # JupyterLite's own configuration stubs, not notebooks.
